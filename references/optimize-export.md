@@ -110,12 +110,17 @@ def make_box_collider(src, name=None):
 ```python
 import bpy
 
-# 只选中 COL_Export 里的对象；其它对象保持原状，不用 select_all
+# 只选中 COL_Export 里的对象，并先取消集合外的选择
+# （导出器只认选择状态，先前选中的其它对象会被一起导出）
 def select_collection(col_name="COL_Export"):
     col = bpy.data.collections[col_name]
-    for ob in col.all_objects:
+    wanted = set(col.all_objects)
+    for ob in bpy.context.view_layer.objects:
+        if ob not in wanted:
+            ob.select_set(False)        # 只改选择状态，不改数据
+    for ob in wanted:
         ob.select_set(True)
-    bpy.context.view_layer.objects.active = next(iter(col.all_objects), None)
+    bpy.context.view_layer.objects.active = next(iter(wanted), None)
 
 select_collection()
 ```
