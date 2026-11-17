@@ -1,63 +1,59 @@
 # Blender 美术生产管线 · blender-art-pipeline
 
-把「做个东西」变成「可交付资产」：有规格表、有阶段、有验收 gate，还带两个能跑的工具。
+## Description:
 
-- **版本**：1.1.1
-- **适用**：Blender 5.3（生产基准）/ 5.2 LTS（兼容下限）
-- **作者**：taosiuman
-- **许可**：文档 MIT；两个脚本随本技能分发
+把「做个东西」变成「可交付资产」的美术生产管线：命名与 collection 层级、面数/贴图/TD 预算、LOD 与碰撞、UV 与烘焙、材质灯光与渲染、绑定动画、几何节点与 FX、引擎导出与 QA，全部写成可判定的硬规格，并附两个可执行工具——`asset_qa.py`（资产一键审计）与 `style_presets.py`（12 套 look 一键落地）。
 
-## 这个技能解决什么
+面向 Blender 5.3（生产基准）与 5.2 LTS（兼容下限）；文档与脚本均标注适用版本与核验日期（2026-11-18）。
 
-美术资产做砸，通常不是建模水平问题，而是**没有规格**：面数没预算、命名靠心情、UV 密度靠猜、导出参数靠记忆、验收靠眼缘。本技能把每一步写成可判定的规格，并在两个关键节点给可执行工具：
+## Publisher:
 
-| 阶段 | 交付物 |
-|---|---|
-| 需求进来 | Brief + 资产清单（类型/预算/交付格式） |
-| 建模前 | 命名规范 + collection 层级 + 面数/贴图/TD 预算表 |
-| 资产完成 | `asset_qa.py` 一键审计（11–13 类检查、12 档阈值、JSON 报告、退出码当 gate） |
-| 风格对齐 | `style_presets.py` 一键落地（12 套 look：世界/雾/三点光/相机/色彩管理） |
-| 出引擎前 | FBX / glTF / USD 标准参数 + LOD / 碰撞 / 单位口径 |
-| 验收 | 视觉验收清单（构图、比例、材质、灯光、氛围） |
+- 作者：taosiuman
+- ClawHub：https://clawhub.ai/taosiuman
+- 源码仓库：https://github.com/taosiuman/blender-art-pipeline
 
-## 两个工具
+### License/Terms of Use:
 
-```bash
-# 资产审计：只读，不改场景，输出 JSON + 非零退出码表示不过 gate
-blender --background asset.blend --python generated/tools/asset_qa.py -- --profile game-prop --json report.json
+文档 MIT；两个脚本随本技能一并分发。
 
-# 风格落地：把一套 look 落到空场景，对象全落在 *_Style 集合，不动用户几何
-blender --background --factory-startup --python generated/tools/style_presets.py -- --list
-blender --background --factory-startup --python generated/tools/style_presets.py -- --look cyberpunk-rain --apply --save base.blend --brief
-```
+## Use Case:
 
-12 套 look：`cyberpunk-rain` `neon-noir` `golden-hour` `nordic-overcast` `liminal-fluorescent` `horror-cold` `cottage-warm` `desert-haze` `moonlit-night` `studio-product` `hd2d-diorama` `post-apoc-dust`。
+美术、技术美术、独立开发者用它把「做一个道具/角色/载具/建筑/场景」拆成有 gate 的阶段流程：接需求写 Brief 与预算 → 按命名与层级建模 → UV/烘焙/材质预算 → 灯光与渲染设置 → 绑定动画 → 导出前跑 `asset_qa.py` 拿 JSON 报告与退出码 → 需要定调时用 `style_presets.py` 落到空场景做 look 开发。
 
-## 内容结构
+## Known Risks and Mitigations:
 
-```
-SKILL.md              三铁律 + Stage 0–7 + 数值速查 + 路由表 + 两个一键工具
-README.md             安装与使用、实测结论
-references/
-  standards.md        命名、单位、collection、面数/贴图/TD 预算
-  pipeline.md         Stage 0–7 阶段定义与 gate
-  modeling.md         拓扑、支持边、布尔、LOD
-  uv-texture.md       UV 密度、打包、贴图类型、烘焙
-  materials-lookdev.md 主材质 + 实例化、材质预算
-  lighting-render.md  三点光、HDRI、雾（**别挂 World Volume**）、渲染设置
-  rig-anim.md         骨架、权重、动作、导出前检查
-  gn-vfx-sim.md       几何节点、FX、缓存
-  optimize-export.md  FBX / glTF / USD 参数、LOD、碰撞
-  qa.md               验收清单
-  reference-match.md  参考图九步闭环（相机匹配 → 比例锁定）
-  style-recipes.md    12 套 look 的可套用参数 + 氛围词 → 工程参数
-  mcp-execution.md    用官方 MCP 在会话里执行这些脚本
-  coverage-map.md     本技能与官方文档的覆盖对照
-  NOTICE.md           来源与许可
-```
+风险：技能里的导出与清理类指引如果直接套在重要资产上，可能改掉用户的选择状态或工程设置。
 
-## 已验证
+缓解：`asset_qa.py` 是**只读审计器**（不改场景）；`style_presets.py` 只往 `COL_Lights_Style` / `COL_Cameras_Style` / `COL_Style_Fog` 里新增对象，**不动用户几何**，且可重复套用。导出片段只改 `select_set` 选择状态，不删对象；在正式资产上执行前先另存或版本化。
 
-- `asset_qa.py` / `style_presets.py` 在 **5.3.0 与 5.2.4** 双构建无头实跑通过
-- 12 套 look 在 **EEVEE 与 Cycles** 各 **12/12** 通过（判定口径：无黑屏 mean<0.03、无过曝 mean>0.85、无灰平 p95−p05<0.15）
-- 全部结论标了适用版本与核验日期（2026-11-18）
+风险：导出与 `bpy` 片段对模式、选择、目标引擎、资产结构敏感，照抄参数可能不匹配当前工程。
+
+缓解：先在目标工程的副本上跑一遍，确认导出内容（`use_selection` 只导选中对象）与引擎内的单位/轴向/切线结果，再用于交付。
+
+风险：面数/贴图预算是经验区间，跨品类差异大。
+
+缓解：阈值集中在 `asset_qa.py` 的 12 档 profile 里，可按项目改；预算冲突时以引擎实测性能为准。
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/taosiuman/skills/blender-art-pipeline)
+- [Source repository](https://github.com/taosiuman/blender-art-pipeline)
+- Blender 官方 API 文档：https://docs.blender.org/api/5.3/
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Configuration]
+
+**Output Format:** [Markdown 规格表与检查清单 + 可直接运行的 Python 片段与两个 CLI 脚本]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [`asset_qa.py` 只读；`style_presets.py` 只在专用集合内新增灯光/相机/雾对象，二者都不会修改用户的 mesh 数据]
+
+## Skill Version(s):
+
+1.1.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+使用者需自行判断这些规格与参数是否适合其项目与客户要求；在正式资产上执行任何改动前，先保留可回退的版本。技能的数值预算来自公开制作实践与实测，不构成对特定引擎性能的保证。
