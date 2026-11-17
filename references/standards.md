@@ -39,7 +39,7 @@
 ```
 COL_<Project>
 ├── COL_Reference       # 比例参考、正射图、人形标尺
-├── COL_Blockout        # 临时块面，交付前必须清空
+├── COL_Blockout        # 临时块面，交付时该集合必须为空（0 对象）
 ├── COL_Geo
 │   ├── COL_Geo_Hero
 │   ├── COL_Geo_Background
