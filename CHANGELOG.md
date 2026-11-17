@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 1.1.3 — 2026-11-18
+
+**变更**
+
+- `skill-card.md` 改写成 ClawHub 卡片模板（`Description` / `Publisher` / `Use Case` / `Known Risks and Mitigations` / `Reference(s)` / `Skill Output` / `Skill Version(s)` / `Ethical Considerations`），把风险与缓解写明（审计器只读、look 脚本只动专用集合、导出片段只改选择状态）
+- 1.1.2 的安全扫描已判 **clean**（AIG 扫描零命中）；本轮只为补齐卡片
+
 ## 1.1.2 — 2026-11-18
 
 **修复**
