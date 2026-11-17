@@ -61,16 +61,19 @@
 ```python
 def make_master_material(name="MAT_Master"):
     mat = bpy.data.materials.new(name)
-    mat.use_nodes = True
+    if mat.node_tree is None:       # 不无条件赋 use_nodes（6.0 会弃用）
+        mat.use_nodes = True
     nt = mat.node_tree
-    nt.nodes.clear()
-    out = nt.nodes.new("ShaderNodeOutputMaterial")
-    bsdf = nt.nodes.new("ShaderNodeBsdfPrincipled")
+    # 新建材质自带 Output + Principled：按类型取现成的，不重建节点树
+    out = next(n for n in nt.nodes if n.type == "OUTPUT_MATERIAL")
+    bsdf = next(n for n in nt.nodes if n.type == "BSDF_PRINCIPLED")
     grp = nt.nodes.new("ShaderNodeGroup")
     # 实际建组在 UI 里更快；脚本只做骨架
     nt.links.new(bsdf.outputs["BSDF"], out.inputs["Surface"])
     return mat
 ```
+
+> 约定：**新建材质**而不是改既有材质，就不需要动用户的节点树；确实要在既有材质上加节点时，只 `nt.nodes.new(...)` 追加，不整体重建（重建会丢掉用户已有的贴图与分组）。
 
 ---
 
