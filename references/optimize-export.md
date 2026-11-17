@@ -105,10 +105,27 @@ def make_box_collider(src, name=None):
 
 ## 4. FBX 导出参数
 
+**先选定导出对象，再调导出器**（`use_selection=True` 只认当前选中的对象，导出器本身不会替你挑集合）：
+
+```python
+import bpy
+
+# 只选中 COL_Export 里的对象；其它对象保持原状，不用 select_all
+def select_collection(col_name="COL_Export"):
+    col = bpy.data.collections[col_name]
+    for ob in col.all_objects:
+        ob.select_set(True)
+    bpy.context.view_layer.objects.active = next(iter(col.all_objects), None)
+
+select_collection()
+```
+
+然后调导出器（同一段脚本里，不要中间切换选择）：
+
 ```python
 bpy.ops.export_scene.fbx(
     filepath=r"C:\out\SM_Name.fbx",
-    use_selection=True,              # 只导 COL_Export 里选的
+    use_selection=True,              # 只导上面 select_collection() 选中的
     object_types={'MESH','ARMATURE','EMPTY'},
     apply_unit_scale=True,           # Apply Unit 开
     apply_scale_options='FBX_SCALE_ALL',   # Apply Scalings = FBX All
@@ -146,6 +163,7 @@ bpy.ops.export_scene.fbx(
 ## 5. glTF / GLB
 
 ```python
+# 依赖上面 select_collection("COL_Export") 的选择状态
 bpy.ops.export_scene.gltf(
     filepath=r"C:\out\SM_Name.glb",
     export_format='GLB',
