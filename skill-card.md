@@ -52,7 +52,9 @@
 
 ## Skill Version(s):
 
-1.1.2 (source: server release evidence)
+1.1.3 (source: frontmatter)
+
+> 说明：ClawHub 上展示的 Skill Card 由**平台服务端生成**（本文件内容作为平台提示与 GitHub 说明保留，不会被计入发布 artifact）；放行判定见 `clawhub skill verify` 的 `decision` 与 `security.status`。
 
 ## Ethical Considerations:
 
