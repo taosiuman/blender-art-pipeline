@@ -63,7 +63,7 @@
 
 ### ② 基线截图
 ```
-1. 场景清空 / 只放 REF_Scale_Human
+1. 新建空工程（不动现有场景文件），只放 REF_Scale_Human
 2. 相机移到与参考大致同角度
 3. get_screenshot_of_window_as_image → 存 baseline_00.png
 ```
