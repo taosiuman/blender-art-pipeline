@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.1.2 — 2026-11-18
+
+**修复**
+
+- `references/optimize-export.md`：`select_collection()` 原先只**追加**选择，先前选中的集合外对象会被一起导出 → 改为**先取消集合外的选择再选本集合**（只改 `select_set`，不动数据），FBX / glTF 两段都依赖这个状态
+- 探针断言同步收紧（`raw/_doc_snippets_probe.py`）：先故意选中 `SM_Outside`，再断言 `select_collection()` 后选中只剩 `[SM_Export_A, SM_Export_B]`、且 FBX / GLB 里都不含 `SM_Outside`
+- **双构建实测**：5.3.0 与 5.2.4 **均 PASS**（`outside_preselected: true` → `selected_after` 只剩集合内对象；FBX 12,812 / 12,828 B、GLB 204 B 均不含集合外对象）
+
 ## 1.1.1 — 2026-11-18
 
 只改「会不会被误执行」的部分，能力零变化。
