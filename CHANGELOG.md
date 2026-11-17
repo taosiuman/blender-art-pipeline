@@ -1,5 +1,18 @@
 # CHANGELOG
 
+## 1.1.1 — 2026-11-18
+
+只改「会不会被误执行」的部分，能力零变化。
+
+**修复 / 收紧**
+
+- `references/optimize-export.md`：`use_selection=True` 原先只出现在导出器参数里、没写选择步骤 → 补 `select_collection()` 显式选 `COL_Export`（**不调 `select_all`**），FBX / glTF 两段都标明依赖该选择状态
+- `references/materials-lookdev.md`：`make_master_material()` 改为**新建材质后按类型取现成的 Output / Principled 节点**，不再重建节点树（旧写法会丢掉既有贴图与分组）；`use_nodes` 只在 `node_tree is None` 时赋
+- `references/reference-match.md` / `standards.md`：把「场景清空」「交付前必须清空」改成**新建空工程 / 该集合必须为空**的表述，避免被读成对用户场景的破坏性操作
+- 新增 `skill-card.md`（技能卡片），供 ClawHub 展示
+
+**实测**：改动只涉及文档与片段，`asset_qa.py` / `style_presets.py` 未动，1.1.0 的四组实测结论继续有效（5.3.0×EEVEE / 5.2.4×EEVEE / 5.3.0×Cycles 各 12/12）。新增断言式探针（`raw/_doc_snippets_probe.py`）双构建各跑一次 → 5.3.0 与 5.2.4 **均 PASS**：材质新建后节点为 `[BSDF_PRINCIPLED, GROUP, OUTPUT_MATERIAL]` 且 BSDF→Output 已连；`select_collection("COL_Export")` 选中恰为 `[SM_Export_A, SM_Export_B]`；FBX（12,812 / 12,828 B）与 GLB 均**不含**集合外对象 `SM_Outside`。
+
 ## 1.1.0 — 2026-11-18
 
 风格从「形容词」变「可渲染状态」。同时修掉一个会让画面全黑的实现错误。
