@@ -3,7 +3,7 @@ name: blender-art-pipeline
 description: "Blender 美术生产管线：把「做一个道具/角色/场景/载具/建筑」做到可交付——命名与 collection 层级、面数/贴图/TD 预算、LOD 与碰撞、UV 与烘焙、材质灯光与渲染、绑定动画、几何节点与 FX、引擎导出与 QA，全部有硬规格，并配 asset_qa.py 一键审计、style_presets.py 一键落地风格。做美术资产、转游戏资产、配导出、跑资产验收、调风格氛围时使用。"
 homepage: https://www.blender.org/
 author: taosiuman
-version: 1.1.0
+version: 1.1.1
 metadata:
   octop:
     emoji: "🎨"
@@ -20,7 +20,7 @@ metadata:
 把「做个东西」变成「可交付资产」：有规格、有阶段、有验收 gate。
 
 **生产基准 = Blender 5.3（5.3.0）｜兼容下限 = 5.2 LTS（5.2.4）**
-**Last verified**: 2026-11-18 —— `asset_qa.py` 与 `style_presets.py` 在 **5.3.0 / 5.2.4 双构建**无头实测；`style_presets` 的 12 个 look 在 **EEVEE 与 Cycles 两个引擎**各 12/12 通过（无黑屏 / 无过曝 / 无灰平）
+**Last verified**: 2026-11-18 —— `asset_qa.py` 与 `style_presets.py` 在 **5.3.0 / 5.2.4 双构建**无头实测；`style_presets` 的 12 个 look 在 **EEVEE 与 Cycles 两个引擎**各 12/12 通过（无黑屏 / 无过曝 / 无灰平）；文档里的材质骨架与「先选集合再导出」两段片段也用双构建探针跑过（FBX/GLB 只含 `COL_Export` 内对象，集合外对象未写入）
 
 ---
 
