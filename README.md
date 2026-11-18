@@ -1,3 +1,8 @@
+> [!IMPORTANT]
+> **This skill is deprecated (2026-11-18).** It has been merged into [`blender-mcp` v4.0.0](https://github.com/taosiuman/blender-skill) as `references/art-*.md` (15 chapters) plus the `asset_qa.py` / `style_presets.py` tools.
+> The ClawHub listing has been withdrawn. **Install `blender-mcp` instead** — one skill covers both MCP control and the art production pipeline.
+> 中文：本技能已并入 `blender-mcp` v4.0.0（`references/art-*.md`），ClawHub 已下架；请改装 `blender-mcp`。
+
 # Blender Art Pipeline
 
 **Version: 1.1.3** — 2026-11-18｜Blender 5.3（生产基准）/ 5.2 LTS（兼容下限）
